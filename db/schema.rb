@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_28_162144) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_28_173322) do
+  create_table "invites", force: :cascade do |t|
+    t.integer "project_id", null: false
+    t.string "email", null: false
+    t.string "role", null: false
+    t.string "token", default: "gen_random_uuid()", null: false
+    t.integer "invited_by_id", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invited_by_id"], name: "index_invites_on_invited_by_id"
+    t.index ["project_id"], name: "index_invites_on_project_id"
+    t.index ["token"], name: "index_invites_on_token", unique: true
+  end
+
   create_table "project_memberships", force: :cascade do |t|
     t.integer "project_id", null: false
     t.integer "user_id", null: false
@@ -35,6 +49,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_28_162144) do
     t.index "lower(email)", name: "index_users_on_lower_email", unique: true
   end
 
+  add_foreign_key "invites", "projects"
+  add_foreign_key "invites", "users", column: "invited_by_id"
   add_foreign_key "project_memberships", "projects"
   add_foreign_key "project_memberships", "users"
 end
