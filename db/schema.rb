@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_28_173322) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_28_180000) do
   create_table "invites", force: :cascade do |t|
     t.integer "project_id", null: false
     t.string "email", null: false
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_28_173322) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invited_by_id"], name: "index_invites_on_invited_by_id"
+    t.index ["project_id", "email"], name: "index_invites_unique_pending", unique: true, where: "accepted_at IS NULL"
     t.index ["project_id"], name: "index_invites_on_project_id"
     t.index ["token"], name: "index_invites_on_token", unique: true
   end
