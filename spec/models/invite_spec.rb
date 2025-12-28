@@ -16,5 +16,13 @@ RSpec.describe Invite, type: :model do
       duplicate_invite = Invite.new(project: project, email: "Test@example.com", role: "viewer", invited_by: user)
       expect(duplicate_invite).to be_invalid
     end
+
+    it "cannot create invite if user already has a membership with project" do
+      user = User.create(email: "Test@example.com")
+      project = Project.create(name: "project 1")
+      ProjectMembership.create(project: project, user: user)
+      invite = Invite.create(project: project, email: "Test@example.com", role: "viewer", invited_by: user)
+      expect(invite).to be_invalid
+    end
   end
 end
