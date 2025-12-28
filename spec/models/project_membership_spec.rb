@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe ProjectMembership, type: :model do
   describe "validations" do
     it "membership default role of viewer" do
-      creator = User.create(email: "test@example.com")
-      project = Project.create(name: "test project", creator: creator)
+      project = Project.create(name: "test project")
       invitee = User.create(email: "invite@example.com")
 
       membership = ProjectMembership.create(project: project, user: invitee)
@@ -12,8 +11,7 @@ RSpec.describe ProjectMembership, type: :model do
     end
 
     it "cannot have duplicate membership for the same project" do
-      creator = User.create(email: "test@example.com")
-      project = Project.create(name: "test project", creator: creator)
+      project = Project.create(name: "test project")
       invitee = User.create(email: "invite@example.com")
 
       ProjectMembership.create(project: project, user: invitee)
