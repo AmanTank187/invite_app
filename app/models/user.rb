@@ -5,4 +5,7 @@ class User < ApplicationRecord
            class_name: "Project",
            foreign_key: :creator_id,
            inverse_of: :creator
+
+  has_many :project_memberships, dependent: :destroy
+  has_many :projects, through: :project_memberships
 end
