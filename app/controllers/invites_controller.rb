@@ -1,15 +1,14 @@
 class InvitesController < ApplicationController
   def create
-    project_id = params["project_id"]
-    invite = Invite.new(invite_params)
-    invite.invited_by = current_user
-    invite.project_id = project_id
-    if invite.save
+    project = Project.find(params["project_id"])
+
+    invite = Invites::Create.call(
+        project: project,
+        invited_by: current_user,
+        invite_params: invite_params
+    )
+
     render json: invite, status: :created
-    else
-    render json: { errors: invite.errors.full_messages },
-           status: :unprocessable_entity
-    end
   end
 
   private

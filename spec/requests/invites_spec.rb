@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "Invites", type: :request do
   describe "POST /create" do
     it "returns http success" do
-      admin = User.create(email: "admin+test@example.com")
-      invitee = User.create(email: "invite+test@example.com")
+      admin = User.find_by(email: "admin+test@example.com")
       project = Project.create(name: "project 1")
+      invitee = User.create(email: "invite+test@example.com")
       post project_invites_url(project), params: { invite: { email: "invite+test@example.com", role: "viewer" } }, as: :json
 
       expect(response).to have_http_status(:success)

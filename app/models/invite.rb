@@ -16,7 +16,7 @@ class Invite < ApplicationRecord
   private
 
   def check_user_membership
-    if project.users.exists?(email: "Test@example.com")
+    if project.users.exists?(email: email)
       errors.add(:base, "User is already a member of this project")
     end
   end
