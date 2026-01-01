@@ -12,7 +12,7 @@ Membership (join table between users and projects)
 You need to add an invite-by-email flow so existing project members can invite people to join a project with a role.
 
 Requirements
-1) Data Model
+<!-- 1) Data Model
 
 Add an Invite model.
 
@@ -34,21 +34,21 @@ timestamps
 
 Rules
 
-Email should be normalized (trim + downcase).
+Email should be normalized (trim + downcase). Done
 
-A project cannot have multiple pending invites for the same email.
+A project cannot have multiple pending invites for the same email. Done
 
 “Pending” means accepted_at is NULL.
 
-If the invited email already belongs to a user who is already a member of the project, inviting should not create a duplicate membership.
+If the invited email already belongs to a user who is already a member of the project, inviting should not create a duplicate membership. Done
 
 DB constraints (expected)
 
 NOT NULL for required columns
 
-Unique index for “one pending invite per project+email”
+Unique index for “one pending invite per project+email” Done
 
-Unique index for token
+Unique index for token Done -->
 
 
 2) Endpoint
