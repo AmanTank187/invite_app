@@ -7,8 +7,12 @@ class InvitesController < ApplicationController
         invited_by: current_user,
         invite_params: invite_params
     )
-
-    render json: invite, status: :created
+    if invite.persisted?
+      status = invite.previous_changes.key?("id") ? :created : :ok
+      render json: invite, status: status
+    else
+      render json: { errors: invite.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private

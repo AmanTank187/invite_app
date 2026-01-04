@@ -12,9 +12,13 @@ module Invites
 
     def call
       invite = Invite.new(@invite_params)
+      invite = Invite.find_or_initialize_by(
+        project: @project,
+        email: @invite_params[:email]
+      )
       invite.invited_by = @invited_by
-      invite.project = @project
-      invite.save
+      invite.assign_attributes(@invite_params)
+      invite.save if invite.new_record?
       invite
     end
   end

@@ -2,18 +2,28 @@ require 'rails_helper'
 
 RSpec.describe "Invites", type: :request do
   describe "POST /create" do
-    it "returns http success" do
+    it "returns http created" do
       admin = User.find_by(email: "admin+test@example.com")
       project = Project.create(name: "project 1")
       invitee = User.create(email: "invite+test@example.com")
       post project_invites_url(project), params: { invite: { email: "invite+test@example.com", role: "viewer" } }, as: :json
 
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:created)
       invite = Invite.last
       expect(invite.project_id).to eq(project.id)
       expect(invite.email).to eq(invitee.email)
       expect(invite.role).to eq("viewer")
       expect(invite.invited_by_id).to eq(admin.id)
+    end
+
+    it "returns 200 if invite has already been sent" do
+      admin = User.find_by(email: "admin+test@example.com")
+      project = Project.create(name: "project 1")
+      invitee = User.create(email: "invite+test@example.com")
+      Invite.create(project: project, invited_by: admin, role: "viewer", email: "invite+test@example.com")
+      post project_invites_url(project), params: { invite: { email: "invite+test@example.com", role: "viewer" } }, as: :json
+
+      expect(response).to have_http_status(:ok)
     end
 
     it "404 project not found" do
@@ -25,7 +35,7 @@ RSpec.describe "Invites", type: :request do
     it "422 invalid role" do
       post project_invites_url(1), params: { invite: { email: "invite+test@example.com", role: "boss" } }, as: :json
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 end
