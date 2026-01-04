@@ -14,7 +14,7 @@ module Invites
       invite = Invite.new(@invite_params)
       invite.invited_by = @invited_by
       invite.project = @project
-      invite.save!
+      invite.save
       invite
     end
   end

@@ -1,5 +1,6 @@
 class InvitesController < ApplicationController
   before_action :set_project, only: [ :create ]
+  before_action :validate_role!, only: [ :create ]
   def create
     invite = Invites::Create.call(
         project: @project,
@@ -22,5 +23,15 @@ class InvitesController < ApplicationController
 
   def set_project
     @project ||= Project.find(params[:project_id])
+  end
+
+  def validate_role!
+    role = invite_params[:role]
+
+    return if Invite.roles.key?(role)
+
+    render json: {
+      errors: "Role is not included in the list"
+    }, status: :unprocessable_entity
   end
 end

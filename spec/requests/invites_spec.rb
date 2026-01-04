@@ -21,5 +21,11 @@ RSpec.describe "Invites", type: :request do
 
       expect(response).to have_http_status(:not_found)
     end
+
+    it "422 invalid role" do
+      post project_invites_url(1), params: { invite: { email: "invite+test@example.com", role: "boss" } }, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end
