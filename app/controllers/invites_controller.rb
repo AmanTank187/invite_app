@@ -1,9 +1,8 @@
 class InvitesController < ApplicationController
+  before_action :set_project, only: [ :create ]
   def create
-    project = Project.find(params["project_id"])
-
     invite = Invites::Create.call(
-        project: project,
+        project: @project,
         invited_by: current_user,
         invite_params: invite_params
     )
@@ -19,5 +18,9 @@ class InvitesController < ApplicationController
 
   def current_user
     User.find_by(email: "admin+test@example.com")
+  end
+
+  def set_project
+    @project ||= Project.find(params[:project_id])
   end
 end

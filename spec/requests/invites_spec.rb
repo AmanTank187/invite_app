@@ -15,5 +15,11 @@ RSpec.describe "Invites", type: :request do
       expect(invite.role).to eq("viewer")
       expect(invite.invited_by_id).to eq(admin.id)
     end
+
+    it "404 project not found" do
+      post project_invites_url(99), params: { invite: { email: "invite+test@example.com", role: "viewer" } }, as: :json
+
+      expect(response).to have_http_status(:not_found)
+    end
   end
 end
