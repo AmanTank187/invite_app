@@ -38,4 +38,22 @@ RSpec.describe "Invites", type: :request do
       expect(response).to have_http_status(:unprocessable_content)
     end
   end
+
+  describe "PATCH /accept" do
+    it "returns 404 in token is invalid" do
+      patch accept_invite_url("token")
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns 200 and membership if invite is already accepted" do
+      admin = User.find_by(email: "admin+test@example.com")
+      project = Project.create(name: "project 1")
+      invitee = User.create(email: "invite+testmember@example.com")
+      invite = Invite.create(project: project, invited_by: admin, role: "viewer", email: "invite+testmember@example.com", accepted_at: Time.now)
+      ProjectMembership.create(project: project, user: invitee, role: "viewer")
+      patch accept_invite_url(invite.token)
+      debugger
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end

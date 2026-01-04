@@ -11,4 +11,10 @@ Rails.application.routes.draw do
   resources :projects do
     resources :invites, only: [ :create ]
   end
+
+  resources :invites, only: [], param: :token do
+    member do
+      patch :accept
+    end
+  end
 end

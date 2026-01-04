@@ -1,5 +1,6 @@
 class InvitesController < ApplicationController
   before_action :set_project, only: [ :create ]
+  before_action :set_invite, only: [ :accept ]
   before_action :validate_role!, only: [ :create ]
   def create
     invite = Invites::Create.call(
@@ -15,6 +16,14 @@ class InvitesController < ApplicationController
     end
   end
 
+  def accept
+    if @invite.accepted_at?
+      user = User.find_by(email: @invite.email)
+      membership = @invite.project.project_memberships.find_by(user_id: user.id)
+      render json: membership, status: :ok
+    end
+  end
+
   private
 
   def invite_params
@@ -27,6 +36,10 @@ class InvitesController < ApplicationController
 
   def set_project
     @project ||= Project.find(params[:project_id])
+  end
+
+  def set_invite
+    @invite ||= Invite.find_by!(token: params[:token])
   end
 
   def validate_role!

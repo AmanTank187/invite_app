@@ -82,7 +82,7 @@ Only project members with role admin can invite.
 
 Implement:
 
-POST /invites/:token/accept
+Patch /invites/:token/accept
 
 Behavior
 
